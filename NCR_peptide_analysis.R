@@ -381,11 +381,11 @@ labfunc <- function(variable,value){
   return(plate_names[value])
 }
 pepplot <- ggplot(growthdflongrel3[which(growthdflongrel3$Type %in% c("Treatment", "Negative_Control")),]) + geom_point(aes(x = Timepoint, y = meanAbs, color = inhibition, shape = Type)) + geom_line(aes(x = Timepoint, y = meanAbs, group = interaction(Sample_ID, Concentration), color = inhibition)) + theme_light() + theme(axis.text = element_text(color = 'black'), strip.background = element_rect(fill='black'), legend.position = "bottom") + facet_wrap(~plate, ncol=4, labeller = labfunc) + guides(color=F) + scale_color_manual(values=c('grey', 'red')) + geom_text(data=growthdflongrel3[which(growthdflongrel3$Timepoint==7 & growthdflongrel3$inhibition == "Yes" & growthdflongrel3$Type != "Positive_Control" & growthdflongrel3$Type != "Blank"),], aes(x = Timepoint, y = meanAbs, label = Sample_ID), nudge_x = 0.6, hjust=0, size=2, fontface='bold', check_overlap = T) + xlab("Time (days)") + ylab(expression("Abs"["600nm"])) + scale_x_continuous(breaks = scales::pretty_breaks(), expand = expand_scale(mult = c(0, 0.5), add=c(2,0))) + scale_shape_manual(values = c(19,1))
-ggsave(pepplot, file = "C:/Users/sah382/Documents/NCR_Peptide_MIC_Assay_test/NCR_Peptide_plates_1-16_inhibition.pdf", dpi = 300, width = 8, height = 6)
-ggsave(pepplot, file = "C:/Users/sah382/Documents/NCR_Peptide_MIC_Assay_test/NCR_Peptide_plates_1-16_inhibition.tiff", dpi = 300, width = 8, height = 6)
-ggsave(pepplot, file = "C:/Users/sah382/Documents/NCR_Peptide_MIC_Assay_test/NCR_Peptide_plates_1-16_inhibition.png", dpi = 300, width = 8, height = 6)
-ggsave(pepplot, file = "C:/Users/sah382/Documents/NCR_Peptide_MIC_Assay_test/NCR_Peptide_plates_1-16_inhibition.eps", dpi = 300, width = 8, height = 6)
-ggsave(pepplot, file = "C:/Users/sah382/Documents/NCR_Peptide_MIC_Assay_test/NCR_Peptide_plates_1-16_inhibition.svg", dpi = 300, width = 8, height = 6)
+ggsave(pepplot, file = file.path(getwd(), "figures", "NCR_Peptide_plates_1-16_inhibition.pdf"), dpi = 300, width = 8, height = 6)
+ggsave(pepplot, file = file.path(getwd(), "figures", "NCR_Peptide_plates_1-16_inhibition.tiff"), dpi = 300, width = 8, height = 6)
+ggsave(pepplot, file = file.path(getwd(), "figures", "NCR_Peptide_plates_1-16_inhibition.png"), dpi = 300, width = 8, height = 6)
+ggsave(pepplot, file = file.path(getwd(), "figures", "NCR_Peptide_plates_1-16_inhibition.eps"), dpi = 300, width = 8, height = 6)
+ggsave(pepplot, file = file.path(getwd(), "figures", "NCR_Peptide_plates_1-16_inhibition.svg"), dpi = 300, width = 8, height = 6)
 
 # now filter the data to grab only day 7 time points and create a new normalized absorbance value
 growthdflongrel3day7 <- growthdflongrel3 %>% group_by(plate) %>% filter(Timepoint == 7) %>% group_by(plate) %>% mutate(normAbs = meanAbs[Sample_ID == "L_cre_BM7"] - meanAbs)
