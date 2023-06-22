@@ -1134,8 +1134,8 @@ pred.r.squared
 
 summary(lm(planponemg))
 
-write.table(planonemg, file = "C:/Users/sah382/Documents/NCR_Peptide_MIC_Assay_test/NCR_Frac_Fac_128/NCR_Frac_Fac_Lcrescens_growth_inhib_1mgml.txt", quote = F, sep='\t', row.names=F, col.names = T)
-write.table(planponemg, file = "C:/Users/sah382/Documents/NCR_Peptide_MIC_Assay_test/NCR_Frac_Fac_128/NCR_Frac_Fac_Lcrescens_growth_inhib_0.1mgml.txt", quote = F, sep='\t', row.names=F, col.names = T)
+write.table(planonemg, file = file.path(getwd(), "NCR_Frac_Fac_128", "NCR_Frac_Fac_Lcrescens_growth_inhib_1mgml.txt"), quote = F, sep='\t', row.names=F, col.names = T)
+write.table(planponemg, file = file.path(getwd(), "NCR_Frac_Fac_128", "NCR_Frac_Fac_Lcrescens_growth_inhib_0.1mgml.txt"), quote = F, sep='\t', row.names=F, col.names = T)
 
 tmpmep <- MEPlot(planonemg, abbrev = 5, cex.xax = 1.6, cex.main = 2)
 tmpmep <- as.data.frame(t(tmpmep))
