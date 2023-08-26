@@ -1,0 +1,128 @@
+LOAD AND SAMPLE
+```{r}
+library(readr)
+library(dplyr)
+library(PMCMRplus)
+library(ggplot2)
+library(dunn.test)
+library(data.table)
+NCRdata <- read_csv("ALL_5_NCR_Data.csv")
+
+NCRdata <- subset(NCRdata, Tissue == "Psyllid")
+
+NpsyllidList=c()
+NpermutList=c()
+pValList=c()
+TreatmentList=c()
+
+#Run simulation 20 times randomly picking between 3 and 150 psyllids per treatment
+for (Npermut in 1:20) {
+  print(paste("Round",Npermut))
+  for (Nsamp in 5:60) {
+    #Arrays to build dataframe for each run
+    Treatments = c()
+    Reps = c()
+    Cqs = c()
+    #Get treatment names and sample each one independently
+    for (TreatmentName in unique(NCRdata$Treatment)) {
+      TreatmentData <- subset(NCRdata, Treatment == TreatmentName)
+      #If trying to sample more datapoints than exist for a treatment, skip it
+      if (Nsamp <= length(TreatmentData$Cq_value)) {
+        sampData = sample_n(TreatmentData,Nsamp)
+        Cqs = c(Cqs,sampData$Cq_value)
+        Reps = c(Reps,sampData$Rep)
+        Treatments = c(Treatments,sampData$Treatment)
+      }
+      
+    }
+    
+  
+    if (length(Cqs) > 0){
+      #Build datatable
+      permutData = data.frame(Reps,Treatments,Cqs)
+      permutData$Treatments = as.factor(permutData$Treatments)
+      res <- dunn.test(permutData$Cqs,permutData$Treatments,method="BH",table=FALSE,kw=FALSE)
+
+      TreatmentList = c(TreatmentList,gsub(" - ","",gsub("KPO4","",res$comparisons[res$comparisons %like% "KPO4"])))
+      pValList = c(pValList,res$P.adjusted[res$comparisons %like% "KPO4"])
+      for (Ncomparisons in 1:length(res$P.adjusted[res$comparisons %like% "KPO4"])) {
+        NpsyllidList=c(NpsyllidList,Nsamp)
+        NpermutList=c(NpermutList,Npermut)
+      }
+
+    }
+    
+  }
+}
+
+#Build final dataframe for graphing
+sampledResults <- data.frame(NpermutList,NpsyllidList,TreatmentList,pValList)
+colnames(sampledResults) <- c("Permutation","Npsyllids","Treatment","pVal")
+sampledResults$LogP <- log10(sampledResults$pVal)
+
+#Graph for individual treatment
+GraphTreatment = "PMB"
+selectData = sampledResults[sampledResults$Treatment == GraphTreatment,]
+plot <- ggplot(data = selectData, aes(x = Npsyllids, y = LogP))  + geom_point(alpha = 0.25) +   xlim(0, 150) + ylim(-16,0)
+plot + annotate("text", x=100, y=-1.1, label="p Value = 0.05") + geom_hline(yintercept=-1.3, linetype="dashed", color = "grey") + ggtitle(paste("Power analysis for ",GraphTreatment," effect on psyllid CLas Cqs")) + theme(plot.title = element_text(hjust = 0.5)) + xlab("Total Psyllids Per Treatment") + ylab("Log10 P value")
+```
+
+
+```{r}
+Treatments = c()
+N = c()
+Power = c()
+
+for (TreatmentName in unique(sampledResults$Treatment)) {
+  TreatmentResults = sampledResults[sampledResults$Treatment == TreatmentName,]
+  for (Np in unique(TreatmentResults$Npsyllids)) {
+    TreatmentN = TreatmentResults[TreatmentResults$Npsyllids == Np,]
+    Power = c(Power, print(length(TreatmentN[TreatmentN$pVal < 0.05,]$pVal)/length(TreatmentN$pVal)))
+    Treatments = c(Treatments, TreatmentName)
+    N = c(N,Np)
+  }
+}
+
+SampledPowerFrame = data.frame(Power,Treatments,N)
+
+
+plot2 <- ggplot(data=SampledPowerFrame, aes(x=N, y=Power, group=Treatments,color=Treatments,linetype=Treatments)) + geom_line() + ggtitle(paste("Dunns Test on Cqs\n(randomly sampled from data)")) + xlab("Total Psyllids Per Treatment") + ylab("Statistical Power")
+plot2
+
+```
+
+
+
+
+
+
+
+
+```{r}
+N=c()
+DeltaCq=c()
+Power=c()
+for (Nsamp in 5:100){
+  for (DeltaL in 1:5) {
+    res = power.dunnett.test(n=Nsamp, groups=6,delta=DeltaL,within.var=22)
+    N = c(N,Nsamp)
+    DeltaCq = c(DeltaCq,DeltaL)
+    Power = c(Power,res$power)
+  }
+} 
+PowerFrame = data.frame(N,DeltaCq,Power)
+```
+
+```{r}
+PowerFrame$DeltaCq = as.factor(PowerFrame$DeltaCq)
+plot1 <- ggplot(data=PowerFrame, aes(x=N, y=Power, group=DeltaCq, linetype=DeltaCq, color=DeltaCq)) + geom_line() + ggtitle(paste("Dunnett's Test on Cqs\n(theoretical, var = 22)")) + xlab("Total Psyllids Per Treatment") + ylab("Statistical Power") + labs(color = "∆Cq",linetype = "∆Cq")
+plot1 + plot2 + plot_annotation(tag_levels = "A") 
+
+```
+
+```{r}
+library(ggplot2)
+library(patchwork)
+# Labels for each plot
+plot1 + plot2 + plot_annotation(tag_levels = "A") 
+```

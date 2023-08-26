@@ -10,8 +10,8 @@ mkdir figures
 ```
 
 You can now:
-- open the `NCR_peptides_analysis.R` file in Rstudio
-- set the working directory to `NCR_peptides_analysis/`
+- Open the `NCR_peptides_analysis.R` file in Rstudio
+- Set the working directory to `NCR_peptides_analysis/`
 - Use run all to run code in the file serially
     - The script will:
         -  read in the necessary inputs from the cloned subdirectories
@@ -27,7 +27,7 @@ You can now:
 | `NCR_Frac_Fac_128/` | R code inputs and raw data for plate growth assays with a fractional factorial design |
 | `Detached_leaf_assay_data_inputs/` | R code and raw data for the NCR peptide analysis using a detached leaf assay |
 
-## Lcre_growth_assay_182_NCR_peptides/
+# Lcre_growth_assay_182_NCR_peptides/
 
 | File or folder | Description |
 | -------------- | ----------- |
@@ -37,7 +37,7 @@ You can now:
 | `Top_47_NCR_peptide_inhibitors.txt` | NCR peptide ID, percent growth rate inhibition, and peptide sequence of top 47 NCR peptides identified from 96-well plate assays |
 | `all_peptides_GRAVY_score_edit.txt` | Detailed metadata for the NCR peptides investigated in the present study. Include details on the UniProt/Genbank accession ID, peptide sequence, the 20 amino acid sequence of the predicted antimicrobial peptide region, number of cysteine residues, hydrophobicity, charge (at pH 7), etc. |
 
-## NCR_Frac_Fac_128/
+# NCR_Frac_Fac_128/
 
 | File or folder | Description |
 | -------------- | ----------- |
@@ -46,7 +46,7 @@ You can now:
 | `Biomatik_182_NCR_peptide_data_wide.txt` | NCR peptide sequence information in wide format |
  `all_peptides_GRAVY_score_edit.txt` | Detailed metadata for the NCR peptides investigated in the present study. Include details on the UniProt/Genbank accession ID, peptide sequence, the 20 amino acid sequence of the predicted antimicrobial peptide region, number of cysteine residues, hydrophobicity, charge (at pH 7), etc. |
 
-## Detached_leaf_assay_data_inputs/
+# Detached_leaf_assay_data_inputs/
 
 | File or folder | Description |
 | -------------- | ----------- |
@@ -55,6 +55,16 @@ You can now:
 | `detach_leaf_NCR_peptides_1_2.rds` | An Rdata formatted file containing qPCR and RT-qPCR data for two NCR peptides utilized in detached leaf assays |
 | `detach_leaf_NCR_peptides_3-8.rds` | An Rdata formatted file containing qPCR and RT-qPCR data for an additional six NCR peptides utilized in detached leaf assays |
 
+# Power_Analysis
 
+| File or folder | Description |
+| -------------- | ----------- |
+| `ALL_5_NCR_Data.xlsx` | CLas 16S rRNA gene qPCR data for individual psyllids sampled in detached leaf assay. |
+| `PowerAnalysis.Rmd` | An Rmarkdown to reproduce the power analysis performed on `ALL_5_NCR_Data.xlsx`. |
 
+# Detached_leaf_psyllid_qPCR_data
 
+| File or folder | Description |
+| -------------- | ----------- |
+| `ALL_5_NCR_data.csv` | CLas 16S rRNA gene qPCR data for individual psyllids sampled in detached leaf assay. |
+| `ALL_5_NCR_Std_Curve_data.csv` | Standard curve information for the CLas 16S rRNA gene qPCR assay data above. |
