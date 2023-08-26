@@ -18,7 +18,10 @@ You can now:
         -  output figures to `NCR_peptide_analysis/figures/`
         -  output any text files or other data to correct subdirectories
 
-To reproduce the power analysis and generate figures, open the `PowerAnalysis.Rmd` rmarkdown code in the `Power_Analysis/` folder in Rstudio, supply the path to the `ALL_5_NCR_Data.xlsx` file, and run the code chunks provided.
+To reproduce the power analysis and generate figures:
+- Open the `PowerAnalysis.Rmd` rmarkdown code in the `Power_Analysis/` folder in Rstudio
+- Edit the path to the `ALL_5_NCR_Data.xlsx` file
+- Run the code chunks provided to perform analysis and generate images
 
 # Description of directory contents
 
